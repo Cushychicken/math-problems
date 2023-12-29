@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Problems</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+        #sidebarMenu {
+            width: 250px; /* Fixed width for the sidebar */
+        }
+		.math-table {
+			width: auto;
+			margin: 0 auto; /* Center the table */
+		}
+		.math-table th, .math-table td {
+			border: 1px solid #ddd; /* Borders around each cell */
+			text-align: center;
+			padding: 8px;
+		}
+		.math-table th {
+			background-color: #f2f2f2;
+		}
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Math Problems</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="d-flex">
+        <div class="bg-light" id="sidebarMenu">
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action bg-light">Home</a>
+                <!-- Add other sidebar items here if needed -->
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1 p-3">
+			<h1>Math Problems</h1>
+            <table id="problems" class="table math-table"></table>
+			<script src="script.js"></script>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/script.js"></script>
+</body>
+</html>
+
