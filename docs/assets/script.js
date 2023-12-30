@@ -44,50 +44,72 @@ document.addEventListener('DOMContentLoaded', displayProblems);
 function tableToPDF() {
     const pdf = new jspdf.jsPDF(); // Default to portrait orientation
 
-    // Get the original table and clone it
-    const originalTable = document.getElementById('problems');
-    const clonedTable = originalTable.cloneNode(true);
+    // Function to clone and prepare the table
+    function prepareTable(hideAnswers) {
+        const originalTable = document.getElementById('problems');
+        const clonedTable = originalTable.cloneNode(true);
 
-    // Remove the "Action" column from each row in the cloned table
-    Array.from(clonedTable.rows).forEach(row => {
-        row.deleteCell(-1); // Assuming the "Action" column is the last one
-    });
+        Array.from(clonedTable.rows).forEach((row, index) => {
+            const cell = row.insertCell(0);
+            if (index === 0) {
+                cell.textContent = 'No.'; // Header row
+                cell.style.fontWeight = 'bold';
+            } else {
+                cell.textContent = index; // Line number
+                if (hideAnswers) {
+                    row.cells[row.cells.length - 2].textContent = ''; // Hide answers
+                }
+            }
+            row.deleteCell(-1); // Remove "Action" column
+        });
 
-    // Header, Footer, and Name Line Text
+        return clonedTable;
+    }
+
     const headerFooterText = "Create worksheets like this for free at www.math-problems.com!";
     const nameLine = "Name: __________________________________________________";
-    const nameLinePositionY = 25; // Vertical position for the name line
-    const tableStartPositionY = 50; // Adjusted start position for the table
 
-    let isFirstPage = true; // Flag to check if it's the first page
+    function addTableToPDF(table, startY, isAnswerKey) {
+        pdf.autoTable({
+            html: table,
+            startY: startY,
+            didDrawPage: function(data) {
+                const pageWidth = pdf.internal.pageSize.width;
+                const margin = 10;
+                const headerFooterTxtWidth = pdf.getStringUnitWidth(headerFooterText) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+                const headerFooterX = (pageWidth - headerFooterTxtWidth) / 2;
 
-    // Generate PDF with header, footer, and name line on the first page
-    pdf.autoTable({
-        html: clonedTable,
-        startY: tableStartPositionY, // Start the table below the name line
-        didDrawPage: function(data) {
-            // Settings for header, footer, and name line
-            pdf.setFontSize(10);
-            pdf.setTextColor(40);
-            const pageWidth = pdf.internal.pageSize.width;
-            const margin = 10; // Define the margin for right alignment
-            const headerFooterTxtWidth = pdf.getStringUnitWidth(headerFooterText) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
-            const headerFooterX = (pageWidth - headerFooterTxtWidth) / 2; // Center alignment for header/footer
+                pdf.setFontSize(10);
+                pdf.setTextColor(40);
 
-            // Header
-            pdf.text(headerFooterText, headerFooterX, 10);
+                // "Answer Key" on the first page of the answer key section only
+                if (isAnswerKey && data.pageNumber === 1) {
+                    pdf.setFontSize(20);
+                    pdf.text('Answer Key', margin, 20); // Left-aligned "Answer Key" text
+                    pdf.setFontSize(10); // Reset font size
+                }
 
-            // Name Line on the first page only
-            if (isFirstPage) {
-                const nameLineX = pageWidth - margin; // Right alignment for name line
-                pdf.text(nameLine, nameLineX, nameLinePositionY, { align: 'right' }); // Right-aligned name line
-                isFirstPage = false; // Set the flag to false after drawing on the first page
+                // Header and Footer
+                pdf.text(headerFooterText, headerFooterX, 10);
+                pdf.text(headerFooterText, headerFooterX, pdf.internal.pageSize.height - 10);
+
+                // Name Line on the first page of the worksheet only
+                if (!isAnswerKey && data.pageNumber === 1) {
+                    pdf.text(nameLine, pageWidth - margin, 25, { align: 'right' });
+                }
             }
+        });
+    }
 
-            // Footer
-            pdf.text(headerFooterText, headerFooterX, pdf.internal.pageSize.height - 10);
-        }
-    });
+    // Add the version of the table without answers (Worksheet)
+    const worksheetTable = prepareTable(true);
+    addTableToPDF(worksheetTable, 50, false);
+
+    // Add a new page for the version of the table with answers (Answer Key)
+    pdf.addPage();
+    const answerKeyTable = prepareTable(false);
+    addTableToPDF(answerKeyTable, 50, true);
 
     pdf.save('math-problems.pdf');
 }
+
