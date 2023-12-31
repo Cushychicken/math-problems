@@ -20,6 +20,7 @@
 			background-color: #f2f2f2;
 		}
     </style>
+	<meta name="description" content="{{ page.description }}">
 </head>
 <body>
     <!-- Navbar -->
@@ -34,18 +35,30 @@
 
     <!-- Sidebar -->
     <div class="d-flex">
-        <div class="bg-light" id="sidebarMenu">
-            <div class="list-group list-group-flush">
-                <a href="#" class="list-group-item list-group-item-action bg-light">Home</a>
-                <!-- Add other sidebar items here if needed -->
-            </div>
-        </div>
+		<div class="bg-light" id="sidebarMenu">
+			<div class="list-group list-group-flush">
+				<a href="/" class="list-group-item list-group-item-action bg-light">Home</a>
+				<a href="/worksheet/" class="list-group-item list-group-item-action bg-light">Worksheets</a>
+				<ul style="list-style-type: disc; padding-left: 20px;"> <!-- Add bullet style and padding -->
+					{% for item in site.worksheet %}
+						<li><a href="{{ item.url }}" class="list-group-item list-group-item-action bg-light">{{ item.title }}</a></li>
+					{% endfor %}
+					<!-- Repeat for other collections -->
+				</ul>
+			</div>
+		</div>
+
 
         <!-- Main Content -->
         <div class="flex-grow-1 p-3">
-			{% include add-sub.html %}
+			{{ content }}
         </div>
     </div>
+	<footer class="footer mt-auto py-3 bg-light">
+	  <div class="container text-center">
+		<span class="text-muted"><em>"Do not worry about your difficulties in mathematics; I can assure you that mine are still greater."</em> - Albert Einstein</span>
+	  </div>
+	</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
