@@ -45,6 +45,13 @@
 					{% endfor %}
 					<!-- Repeat for other collections -->
 				</ul>
+				<a href="#" class="list-group-item list-group-item-action bg-light">By Grades</a>
+				<ul style="list-style-type: disc; padding-left: 20px;"> <!-- Add bullet style and padding -->
+					{% for item in site.grades %}
+						<li><a href="{{ item.url }}" class="list-group-item list-group-item-action bg-light">{{ item.title }}</a></li>
+					{% endfor %}
+					<!-- Repeat for other collections -->
+				</ul>
 			</div>
 		</div>
 

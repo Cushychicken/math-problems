@@ -7,7 +7,7 @@ title: First Grade Math Problems
 description: Math problems for first graders. Help your students with math practice. Make and download practice worksheets as PDF immediately!
 
 ---
-
+# {{ page.title }}
 A typical first grade math curriculum includes:
 
 1. Basic addition and subtraction (0-20).

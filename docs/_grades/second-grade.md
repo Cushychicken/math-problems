@@ -7,7 +7,7 @@ title: Second Grade Math Problems
 description: Math problems for second graders. Help your students with math practice. Make and download practice worksheets as PDF immediately!
 
 ---
-
+# {{ page.title }}
 A typical second grade math curriculum includes:
 
 1. Advanced addition and subtraction (within 100).
